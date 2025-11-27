@@ -1,116 +1,127 @@
-*****🛡️ Node.js JWT Authentication API*****
+# 🛡️ Node.js JWT Authentication API
 
-A secure, production-ready Node.js authentication API with JWT login, password hashing, rate limiting, RBAC (Role-Based Access Control), and modern security best practices.
+![Node.js](https://img.shields.io/badge/Node.js-14.x-green)
+![Express](https://img.shields.io/badge/Express-4.x-blue)
+![JWT](https://img.shields.io/badge/JWT-secure-orange)
+![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-This project demonstrates a complete backend setup for user authentication, role management, and API protection.
+A **secure, production-ready Node.js authentication API** featuring JWT login, password hashing, rate limiting, RBAC (Role-Based Access Control), and modern security best practices.
 
-🚀 Features
-Authentication & Security
+---
 
-JWT-based login and authentication
+## 🚀 Features
 
-Password hashing with bcryptjs for secure storage
+### 🔐 Authentication & Security
+- JWT-based login and authentication
+- Password hashing with `bcryptjs` for secure storage
+- Role-Based Access Control (RBAC) for admin/user privileges
+- Protected routes requiring valid JWT
 
-Role-Based Access Control (RBAC) for admin/user privileges
+### ⏱️ Rate Limiting & Throttling
+- Global rate limiting using `express-rate-limit`
+- IP-based route-specific rate limiting using `rate-limiter-flexible`
+- Automated delays on repeated login attempts to prevent brute-force attacks
 
-Protected routes that require valid JWT
+### 🛡️ API Security Middleware
+- **Helmet**: Adds HTTP headers for enhanced security (XSS, HSTS, clickjacking prevention)
+- **CORS**: Configured with `credentials: true` and allowed origins
 
-Rate Limiting & Throttling
+### ⚙️ Express Middleware
+- JSON request parsing with `express.json()`
+- Body parsing for POST requests
+- Clean modular architecture: `authController` & `authMiddleware`
 
-Global rate limiting using express-rate-limit
+---
 
-IP-based route-specific rate limiting using rate-limiter-flexible
+## 🗂️ Routes
 
-Automated delays on repeated login attempts to prevent brute-force attacks
+| Route      | Method | Description |
+|-----------|--------|-------------|
+| `/register` | POST  | Register a new user |
+| `/login`    | POST  | Authenticate user and return JWT |
+| `/profile`  | GET   | Protected route; accessible only with JWT |
+| `/users`    | GET   | Protected admin route; lists all users |
 
-API Security Middleware
+---
 
-Helmet: Adds HTTP headers for enhanced security (XSS protection, HSTS, clickjacking prevention, etc.)
+## 🏗️ Architecture Diagram
+```
+[Frontend App] --HTTPS--> [Node.js API] --JWT--> [Protected Routes]
+                                                    |
+                                                    |-- Helmet & CORS
+                                                    |-- Rate Limiting
+                                                    |-- bcrypt password hashing
+                                                    |-- RBAC (Admin/User)
+                                                    |
+                                            [In-memory Users / Database]
+```
 
-CORS: Configured with credentials: true and allowed origins for safe cross-origin requests
+---
 
-Express Middleware
+## ⚡ Installation
 
-JSON request parsing with express.json()
-
-Body parsing support for POST requests
-
-Clean modular architecture: authController & authMiddleware
-
-Routes
-Route	Method	Description
-/register	POST	Register a new user
-/login	POST	Authenticate user and return JWT
-/profile	GET	Protected route; accessible only with JWT
-/users	GET	Protected admin route; lists all users
-⚡ Installation
-
-Clone the repository:
-
+```bash
+# Clone repository
 git clone https://github.com/<your-username>/<repo-name>.git
 cd <repo-name>
 
-
-Install dependencies:
-
+# Install dependencies
 npm install
 
-
-Create a .env file:
-
-PORT=5000
+# Create .env file
+echo "PORT=5000
 JWT_SECRET=your_jwt_secret_key
-BCRYPT_SALT_ROUNDS=10
+BCRYPT_SALT_ROUNDS=10"
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=$2b$10$wPgNe9HcoWXVlFU8cKaAGOe1vM2ZW3c0ISI6tusuDhDwFzm29FLC6
 
-
-Start the server:
-
+# Start server
 npm start
+```
+Server runs on http://localhost:5000 (or your .env PORT).
 
+---
 
-Server will run on http://localhost:5000 (or your .env PORT).
+## 🔐 Security & Best Practices
 
-🔐 Security & Best Practices Implemented
+- **Passwords hashed** with bcrypt
+- **JWT authentication** for protected routes
+- **RBAC** for admin-only endpoints
+- **Rate limiting** per IP to prevent abuse
+- **Brute-force protection** with automatic delays & blocking
+- **CORS & Helmet** for security headers and safe cross-origin requests
 
-Password Security: All passwords are hashed before storage.
+---
 
-JWT Authentication: All protected routes require a valid JWT token.
+## 🛠️ Tech Stack
 
-RBAC: Role-based access control for admin-only endpoints.
+- Node.js & Express
+- bcryptjs
+- jsonwebtoken
+- express-rate-limit
+- rate-limiter-flexible
+- Helmet
+- CORS
 
-Rate Limiting: Prevents abuse by limiting requests per IP.
+---
 
-Brute Force Protection: Login attempts automatically delayed and blocked after repeated failures.
-
-CORS & Helmet: Protects API from malicious cross-site requests and sets security headers.
-
-🛠️ Tech Stack
-
-Node.js & Express – Backend framework
-
-bcryptjs – Password hashing
-
-jsonwebtoken – JWT authentication
-
-express-rate-limit – Basic global rate limiting
-
-rate-limiter-flexible – Advanced IP throttling and login attempt control
-
-Helmet – Security headers
-
-CORS – Cross-origin request control
-
-📝 Code Structure
+## 📝 Code Structure
+```
 .
-├── authController.js     # Handles registration and login
-├── authMiddleware.js     # JWT authentication & RBAC
-├── server.js             # Express server with middleware and routes
-├── package.json          # Project dependencies
-├── .env                  # Environment variables (JWT secret, port, salt rounds)
-└── README.md             # Project documentation
+├── authController.js # Handles registration and login
+├── authMiddleware.js # JWT authentication & RBAC
+├── server.js # Express server with middleware and routes
+├── package.json # Project dependencies
+├── .env # Environment variables
+└── README.md # Project documentation
+```
 
-⚡ Usage Example
-Register a user
+---
+
+## ⚡ Usage Example
+
+### Register a user
+```http
 POST /register
 Content-Type: application/json
 
@@ -118,8 +129,10 @@ Content-Type: application/json
   "username": "john",
   "password": "password123"
 }
+```
 
-Login
+### Login
+```http
 POST /login
 Content-Type: application/json
 
@@ -127,38 +140,56 @@ Content-Type: application/json
   "username": "john",
   "password": "password123"
 }
+```
 
+### Admin Login
+```http
+POST /login
+Content-Type: application/json
 
-Response:
+{
+  "username": "admin",
+  "password": "adminpassword"
+}
+```
 
+### Response:
+```
 {
   "token": "your_jwt_token_here"
 }
+```
 
-Access protected route
+### Access protected route
+```
 GET /profile
 Authorization: Bearer <your_jwt_token_here>
+```
 
-🛡️ Notes
+### Access admin route
+```
+GET /users
+Authorization: Bearer <your_admin_jwt_token_here>
+```
 
-This project uses in-memory storage for users (users array). For production, replace with a database (MongoDB, PostgreSQL, etc.)
+## 🛡️ Notes
 
-JWT expiration is currently short (1m) for demonstration. Increase in production.
+- Uses **in-memory storage** for users (`users` array). Replace with a database in production.
+- JWT expiration is short (`1m`) for demonstration; increase in production.
+- Rate limiter values (`points`, `duration`) can be adjusted.
+- Ensure `JWT_SECRET` is **strong and private**.
 
-Rate limiter values (points, duration) can be adjusted based on expected traffic.
+---
 
-Ensure JWT_SECRET is strong and private in production.
+## 💡 Future Improvements
 
-💡 Future Improvements
+- Add **refresh token mechanism**
+- Integrate **Redis** for distributed rate limiting
+- Add **email verification & password reset**
+- Implement **logging & monitoring**
 
-Add refresh token mechanism
+---
 
-Integrate Redis for distributed rate limiting
-
-Add email verification and password reset
-
-Implement logging & monitoring for API usage
-
-📄 License
+## 📄 License
 
 MIT License – feel free to use and modify.
