@@ -1,4 +1,4 @@
-*🛡️ Node.js JWT Authentication API*
+#*🛡️ Node.js JWT Authentication API*
 
 A secure, production-ready Node.js authentication API with JWT login, password hashing, rate limiting, RBAC (Role-Based Access Control), and modern security best practices.
 
